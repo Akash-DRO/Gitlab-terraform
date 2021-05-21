@@ -18,10 +18,12 @@ variable "gitlab_token" {
 
 resource "gitlab_project" "project_1" {
     name = "project_1"
+    namespace_id = "${gitlab_group.Admins.id}"
 }
 
 resource "gitlab_project" "project_2" {
     name = "project_2"
+    namespace_id = "${gitlab_group.Devs.id}"
 }
 
 resource "gitlab_group" "Devs" {
@@ -61,14 +63,14 @@ resource "gitlab_user" "user-1" {
 }
 
 resource "gitlab_group_membership" "gm-1" {
-  group_id     = "6"
-  user_id      = 4
+  group_id     = gitlab_group.Devs.id
+  user_id      = gitlab_user.user-1.id
   access_level = "guest"
 }
 
 resource "gitlab_group_membership" "gm-2" {
-  group_id     = "8"
-  user_id      = 5
+  group_id     = gitlab_group.Admins.id
+  user_id      = gitlab_user.user-2.id
   access_level = "guest"
 }
 
